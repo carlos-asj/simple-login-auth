@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "next": "^16.0.6",
+    "node": "^20.19.6"
+  }
+}
