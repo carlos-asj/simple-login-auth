@@ -1,27 +1,26 @@
-const { Client, ServerApiVersion } = require("mongodb");
-const uri =
-  "mongodb+srv://darcilemonsms_db_user:mqApQlfCFCJuMn1f@casjdev.blfoghx.mongodb.net/?appName=casjdev";
+import { Client } from "pg";
 
-const client = new Client(uri, {
-  server_api: {
-    version: ServerApiVersion.vl,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+async function query(queryObject) {
+  const client = new Client({
+    host: "localhost",
+    port: "5432",
+    user: "local_user",
+    database: "local_db",
+    password: "local_password",
+  });
 
-async function run() {
   try {
     await client.connect();
-
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    const res = await client.query(queryObject);
+    return res;
   } catch (error) {
     console.error(error);
+    throw error;
   } finally {
-    await client.close();
+    await client.end();
   }
 }
-run().catch(console.dir);
+
+export default {
+  query: query,
+};

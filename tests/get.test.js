@@ -1,4 +1,4 @@
-test("auto testing the iindex endpoint", async () => {
-  const res = await fetch("http://localhost:3000");
+test("auto testing the index endpoint", async () => {
+  const res = await fetch("http://localhost:3000/api/v1/status");
   expect(res.status).toBe(200);
 });
