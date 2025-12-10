@@ -13,7 +13,6 @@ test("POST test for migrations endpoint should return 200", async () => {
   expect(res1.status).toBe(201);
 
   const responseBody1 = await res1.json();
-  console.log(responseBody1);
 
   expect(Array.isArray(responseBody1)).toBe(true);
   expect(responseBody1.length).toBeGreaterThan(0);
