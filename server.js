@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import Users from "./Users.js";
+import Users from "./models/Users.js";
 
 dotenv.config();
 
@@ -23,15 +23,15 @@ const connectDB = async () => {
 
 connectDB();
 
-// // CREATE
-// app.post("/users", async (req, res) => {
-//   try {
-//     const newUser = await Users.create(req.body);
-//     res.json(newUser);
-//   } catch (error) {
-//     res.json({ error: error });
-//   }
-// });
+// CREATE
+app.post("/users", async (req, res) => {
+  try {
+    const newUser = await Users.create(req.body);
+    res.json(newUser);
+  } catch (error) {
+    res.json({ error: error });
+  }
+});
 
 // READ
 app.get("/users", async (req, res) => {
@@ -43,17 +43,17 @@ app.get("/users", async (req, res) => {
   }
 });
 
-// // UPDATE
-// app.put("/users/:id", async (req, res) => {
-//   try {
-//     const udpateUser = await Users.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//     });
-//     res.json(udpateUser);
-//   } catch (error) {
-//     res.json({ error: error });
-//   }
-// });
+// UPDATE
+app.put("/users/:id", async (req, res) => {
+  try {
+    const udpateUser = await Users.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.json(udpateUser);
+  } catch (error) {
+    res.json({ error: error });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
