@@ -60,16 +60,16 @@ app.put("/users/:id", async (req, res) => {
     if (!emailData || !emailData.includes("@")) {
       console.log("E-mail incorreto!");
       return res.status(400).json({
-        
+        error: "E-mail incorreto!"
       })
     }
 
     const udpateUser = await Users.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
-    res.json(udpateUser);
+    res.status(201).json(udpateUser);
   } catch (error) {
-    res.json({ error: error });
+    res.status(400).json({ error: error.message });
   }
 });
 
