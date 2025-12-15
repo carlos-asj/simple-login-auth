@@ -26,10 +26,19 @@ connectDB();
 // CREATE
 app.post("/users", async (req, res) => {
   try {
+    const emailData = req.body.email;
+
+    if (!emailData || !emailData.includes("@")){
+      console.log("E-mail incorreto!");
+      return res.status(400).json({
+        error: "E-mail incorreto!"
+      })
+    }
+    
     const newUser = await Users.create(req.body);
-    res.json(newUser);
+    res.status(201).json(newUser)
   } catch (error) {
-    res.json({ error: error });
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -46,6 +55,15 @@ app.get("/users", async (req, res) => {
 // UPDATE
 app.put("/users/:id", async (req, res) => {
   try {
+    const emailData = req.body.email;
+
+    if (!emailData || !emailData.includes("@")) {
+      console.log("E-mail incorreto!");
+      return res.status(400).json({
+        
+      })
+    }
+
     const udpateUser = await Users.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
