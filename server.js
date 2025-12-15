@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import Users from "./models/Users.js";
+import Users from "./Users.js";
 
 dotenv.config();
 
