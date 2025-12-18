@@ -2,8 +2,7 @@ services:
   database:
     container_name: "mongo_dev"
     image: "mongo:latest"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: 
-      MONGO_INITDB_ROOT_PASSWORD: 
+    env_file:
+      - "../.env"
     ports:
       - "5555:5555"

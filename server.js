@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import Users from "./Users.js";
+import Users from "./infra/models/Users.js";
 
 dotenv.config();
 
@@ -26,20 +26,38 @@ connectDB();
 // CREATE
 app.post("/users", async (req, res) => {
   try {
+    const newUser = await req.body;
     const emailData = req.body.email;
+    const emailValidation = await Users.exists({ email: emailData });
 
-    if (!emailData || !emailData.includes("@")){
-      console.log("E-mail incorreto!");
+    const nameData = req.body.name;
+    if(!nameData) {
       return res.status(400).json({
-        error: "E-mail incorreto!"
+        error: "Sem nome inserido!"
       })
     }
-    
-    const newUser = await Users.create(req.body);
-    res.status(201).json(newUser)
+
+    if (!emailData || !emailData.includes("@")){
+      return res.status(400).json({
+        error: "E-mail incorreto!"
+      });
+    }
+
+    if (emailValidation !== null) {
+      return res.status(400).json({
+        error: "E-mail já existe!"
+      })
+    }
+
+    Users.create(newUser)
+    res.status(201).json(newUser);
+
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({
+      error: error.message
+    })
   }
+
 });
 
 // READ
