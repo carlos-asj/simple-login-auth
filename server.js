@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Users from "./infra/models/Users.js";
+import hashPassword from "./infra/hash.js"; 
 
 dotenv.config();
 
@@ -31,6 +32,15 @@ app.post("/users", async (req, res) => {
     const emailValidation = await Users.exists({ email: emailData });
 
     const nameData = req.body.name;
+
+    const pwdData = req.body.password;
+
+    if(!pwdData) {
+      return res.status(400).json({
+        error: "Sem senha inserido!"
+      })
+    }
+
     if(!nameData) {
       return res.status(400).json({
         error: "Sem nome inserido!"
@@ -49,7 +59,13 @@ app.post("/users", async (req, res) => {
       })
     }
 
-    Users.create(newUser)
+    const pwdHash = await hashPassword(pwdData);
+
+    Users.create({
+      name: nameData,
+      email: emailData,
+      password: pwdHash
+    })
     res.status(201).json(newUser);
 
   } catch (error) {
