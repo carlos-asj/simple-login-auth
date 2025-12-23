@@ -2,14 +2,14 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Users from "./infra/models/Users.js";
-import hashPassword from "./infra/hash.js"; 
+import { createUserController } from "./infra/services/controllers/userController.js";
+import { userValidation } from "./infra/validator/userValidator.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = 3000;
 
-// Middleware - function that treat received informations
 
 app.use(express.json()); // basically convert things to json
 
@@ -24,56 +24,28 @@ const connectDB = async () => {
 
 connectDB();
 
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+})
+
+// HEALTHY CHECK
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    database: mongoose.connection.readyState === 1 ? "connected" : "disconnected"
+  })
+})
+
 // CREATE
-app.post("/users", async (req, res) => {
-  try {
-    const newUser = await req.body;
-    const emailData = req.body.email;
-    const emailValidation = await Users.exists({ email: emailData });
+app.post("/users", userValidation, createUserController);
 
-    const nameData = req.body.name;
-
-    const pwdData = req.body.password;
-
-    if(!pwdData) {
-      return res.status(400).json({
-        error: "Sem senha inserido!"
-      })
-    }
-
-    if(!nameData) {
-      return res.status(400).json({
-        error: "Sem nome inserido!"
-      })
-    }
-
-    if (!emailData || !emailData.includes("@")){
-      return res.status(400).json({
-        error: "E-mail incorreto!"
-      });
-    }
-
-    if (emailValidation !== null) {
-      return res.status(400).json({
-        error: "E-mail já existe!"
-      })
-    }
-
-    const pwdHash = await hashPassword(pwdData);
-
-    Users.create({
-      name: nameData,
-      email: emailData,
-      password: pwdHash
-    })
-    res.status(201).json(newUser);
-
-  } catch (error) {
-    res.status(400).json({
-      error: error.message
-    })
-  }
-
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: "Página não encontrada"
+  });
 });
 
 // READ
@@ -106,6 +78,16 @@ app.put("/users/:id", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
+// DELETE
+app.delete("/users/:id", async (req, res) => {
+  try {
+    
+
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+})
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
