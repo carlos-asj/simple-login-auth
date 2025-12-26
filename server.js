@@ -41,13 +41,6 @@ app.get("/health", (req, res) => {
 // CREATE
 app.post("/users", userValidation, createUserController);
 
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    error: "Página não encontrada"
-  });
-});
-
 // READ
 app.get("/users", async (req, res) => {
   try {
