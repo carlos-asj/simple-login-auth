@@ -46,6 +46,6 @@ POST request:
     "email": "emailtest@email.com"<br/>
   }<br/>
 ## Validations for user register 🛅
-Name: Needs to be more than two characters;
-Email: Don't accept duplicate emails and the input is required;
+Name: Needs to be more than two characters;<br/>
+Email: Don't accept duplicate emails and the input is required;<br/>
 Password: More than six characters.
