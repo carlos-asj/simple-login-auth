@@ -1,4 +1,5 @@
 import Joi from "joi";
+import bcrypt from "bcryptjs";
 
 export const userValidation = (req, res, next) => {
   const Schema = Joi.object({

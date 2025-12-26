@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import Users from "./infra/models/Users.js";
 import { createUserController } from "./infra/services/controllers/userController.js";
 import { userValidation } from "./infra/validator/userValidator.js";
+import login from "./infra/services/login/userLogin.js";
 
 dotenv.config();
 
@@ -71,6 +72,8 @@ app.put("/users/:id", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
+app.post("/users/login", login)
 
 // DELETE
 app.delete("/users/:id", async (req, res) => {
