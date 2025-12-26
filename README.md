@@ -36,8 +36,8 @@ npm run dev
 ```
 ## Routes 🛤️
 GET request:
-- http://localhost:3000/users
-  Show all the users register on the database
+- http://localhost:3000/users<br/>
+  Show all the users register on the database<br/>
 POST request:
 - http://localhost:3000/users<br/>
   json object {<br/>
