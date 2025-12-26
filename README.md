@@ -39,12 +39,12 @@ GET request:
 - http://localhost:3000/users
   Show all the users register on the database
 POST request:
-- http://localhost:3000/users
-  json object {
-    "name": "username",
-    "password": "password_example",
-    "email": "emailtest@email.com"
-  }
+- http://localhost:3000/users<br/>
+  json object {<br/>
+    "name": "username",<br/>
+    "password": "password_example",<br/>
+    "email": "emailtest@email.com"<br/>
+  }<br/>
 ## Validations for user register 🛅
 Name: Needs to be more than two characters;
 Email: Don't accept duplicate emails and the input is required;
