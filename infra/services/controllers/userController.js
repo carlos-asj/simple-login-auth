@@ -18,7 +18,7 @@ export const createUserController = async (req, res) => {
     });
 
   } catch (error) {
-    if (error.message.includes("já cadastrado")) {
+    if (error.message.includes("já existe")) {
       return res.status(409).json({
         success: false,
         error: error.message
