@@ -1,8 +1,9 @@
 services:
   database:
-    container_name: "mongo_dev"
-    image: "mongo:latest"
+    container_name: "postgres-dev"
+    image: "postgres:16.11-alpine3.22"
     env_file:
-      - "../.env"
+      - ../.env
+
     ports:
-      - "5555:5555"
+      - "5432:5432"

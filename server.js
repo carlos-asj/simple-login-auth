@@ -1,27 +1,14 @@
 import express from "express";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
+import connectDB from "./infra/database.js";
 import Users from "./infra/models/Users.js";
 import { createUserController } from "./infra/services/controllers/userController.js";
 import { userValidation } from "./infra/validator/userValidator.js";
 import login from "./infra/services/login/userLogin.js";
 
-dotenv.config();
-
 const app = express();
 const PORT = 3000;
 
-
 app.use(express.json()); // basically convert things to json
-
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("Connected to MongoDB");
-  } catch (error) {
-    console.error("Failed to database connect");
-  }
-};
 
 connectDB();
 
