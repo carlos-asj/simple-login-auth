@@ -22,3 +22,27 @@ async function connectDB() {
 };
 
 connectDB();
+
+async function selectCustomers() {
+  const client = await connectDB(); // conecta com o banco
+  const res = await client.query("SELECT * FROM clientes"); // envia um comando para o banco
+  return res.rows;
+};
+
+async function selectCustomer(id) {
+  const client = await connectDB(); // conecta com o banco
+  const res = await client.query("SELECT * FROM clientes WHERE ID=$1", [id]);
+  return res.rows;
+};
+
+async function addCustomer(customer) {
+  const client = await connectDB(); // conecta com o banco
+  const sql = "INSERT INTO clientes (nome, idade, uf) VALUES ($1, $2, $3)";
+  const res = await client.query(sql, [customer.nome, customer.idade, customer.uf]);
+};
+
+module.exports = {
+  selectCustomers,
+  selectCustomer,
+  addCustomer
+}
