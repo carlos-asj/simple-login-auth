@@ -1,34 +1,24 @@
-import { Client } from "pg";
-
-async function query(queryObject) {
-  let client;
-  try {
-    client = await getNewClient();
-    const result = await client.query(queryObject);
-    return result;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  } finally {
-    await client.end();
+async function connectDB() {
+  // verifica se a conexão já foi criada
+  if(global.connection) {
+    return global.connection.connect();
   }
-}
 
-async function getNewClient() {
-  const client = new Client({
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT,
-    user: process.env.POSTGRES_USER,
-    database: process.env.POSTGRES_DB,
-    password: process.env.POSTGRES_PASSWORD,
-    ssl: getSSLValues(),
+  // cria a pool
+  const { Pool } = require("pg");
+  const pool = new Pool({
+    connectionString: process.env.CONNECTION_STRING
   });
+  // cria um cliente e conecta na pool
+  const client = await pool.connect();
+  console.log("Pool created!")
 
-  await client.connect();
-  return client;
-}
+  const res = await client.query("SELECT now();");
+  console.log(res.rows[0]);
+  client.release(); // libera a conexão
 
-export default {
-  query, // same as query:query
-  getNewClient, // same as getNewClient: getNewClient
+  global.connection = pool;
+  return pool.connect();
 };
+
+connectDB();
