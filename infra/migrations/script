@@ -1,0 +1,5 @@
+CREATE TABLE clientes (
+  nome VARCHAR(100),
+  idade INT,
+  uf CHAR(2)
+);

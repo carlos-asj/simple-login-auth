@@ -1,17 +1,18 @@
+import { Pool } from "pg";
+
 async function connectDB() {
   // verifica se a conexão já foi criada
   if(global.connection) {
     return global.connection.connect();
   }
 
-  // cria a pool
-  const { Pool } = require("pg");
+  // cria a pool=
   const pool = new Pool({
     connectionString: process.env.CONNECTION_STRING
   });
   // cria um cliente e conecta na pool
   const client = await pool.connect();
-  console.log("Pool created!")
+  console.log("Pool created!");
 
   const res = await client.query("SELECT now();");
   console.log(res.rows[0]);
@@ -41,7 +42,7 @@ async function addCustomer(customer) {
   const res = await client.query(sql, [customer.nome, customer.idade, customer.uf]);
 };
 
-module.exports = {
+export default {
   selectCustomers,
   selectCustomer,
   addCustomer
