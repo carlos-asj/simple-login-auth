@@ -1,10 +1,9 @@
 <template>
   <v-app>
     <v-main>
-      <HelloWorld />
+      <Register />
     </v-main>
 
-    <AppFooter />
   </v-app>
 </template>
 
