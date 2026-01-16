@@ -68,7 +68,7 @@ export const addNewUser = async (req, res) => {
   }
 }
 
-export const userLogin = async (req, res) => {
+export const checkEmail = async (req, res) => {
   const userObj = req.body
   try {
     
@@ -76,8 +76,8 @@ export const userLogin = async (req, res) => {
       where: { email: userObj.email }
     });
 
-    const userPwd = await UserModel.findOne({
-      where: { password: userObj.password }
+    const user = await UserModel.findOne({
+      where: { email: userObj.email }
     });
 
     if (!userEmail) {
@@ -86,16 +86,10 @@ export const userLogin = async (req, res) => {
       });
     };
 
-    if (!userPwd) {
-      return res.status(404).json({
-        message: "Wrong password"
-      });
-    };
-
     return res.status(200).json({
-      message: "User found",
-      name: userObj.name
-    })
+      message: "Email found",
+      user: user
+    });
 
   } catch (error) {
     console.log(error);
@@ -104,3 +98,37 @@ export const userLogin = async (req, res) => {
       });
   };
 };
+
+export const userLogin = async (req, res) => {
+  const userObj = req.body;
+  try {
+    const user = await UserModel.findOne({
+      where: { email: userObj.email }
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    };
+
+    if(userObj.password === user.password) {
+      return res.status(200).json({
+        message: "Successfully logged in",
+        user: user
+      });
+    } else {
+      return res.status(401).json({
+        message: "Wrong password"
+      });
+    };
+
+    return res.status(404).json({
+      message: "User not found"
+    });
+
+    
+  } catch (error) {
+    console.error(error);
+  }
+}

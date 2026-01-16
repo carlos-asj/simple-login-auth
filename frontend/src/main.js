@@ -1,7 +1,11 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import vuetify from './plugins/vuetify' // Importe o export default acima
+import router from './router'
+import vuetify from './plugins/vuetify'
 
 const app = createApp(App)
-app.use(vuetify) // O erro 'map' costuma sumir aqui
+
+app.use(router)
+app.use(vuetify)
+
 app.mount('#app')

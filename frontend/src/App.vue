@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <Register />
+      <router-view />
     </v-main>
 
   </v-app>
