@@ -13,7 +13,7 @@
         <v-card-title class="text-h5 font-weight-bold">
           {{ step === 'identification' ? 'Login' : '' }}
         </v-card-title>
-        <v-card-subtitle v-if="step === 'senha'" class="text-body-1 mt-1">
+        <v-card-subtitle v-if="step === 'senha'" class="text-body-1 mt-1 text-black">
           {{ userData.name }}
         </v-card-subtitle>
       </v-card-item>
@@ -35,13 +35,15 @@
               ></v-text-field>
             </v-window-item>
 
-            <v-window-item value="senha" class="text-center">
-              <div class="d-inline-flex align-center mb-6 email-chip" @click="voltarParaEmail">
-                <v-icon size="small" class="mr-2">mdi-account-circle-outline</v-icon>
+            <v-window-item value="senha">
+              <div class="text-center">
+                <div class="d-inline-flex align-center mb-6 email-chip" @click="voltarParaEmail">
+                  <v-icon size="small" class="mr-2">mdi-account-circle-outline</v-icon>
 
-                <span class="text-body-2">{{ userData.email }}</span>
+                  <span class="text-body-2">{{ userData.email }}</span>
 
-                <v-icon size="small" class="ml-2">mdi-chevron-down</v-icon>
+                  <v-icon size="small" class="ml-2">mdi-chevron-down</v-icon>
+                </div>
               </div>
 
               <v-text-field
@@ -182,7 +184,7 @@ const handleLogin = async () => {
     console.error('Erro no login:', error);
 
     if (error.response.status === 401) {
-    passwordError.value = 'Wrong password. Try again';
+      passwordError.value = 'Wrong password. Try again';
     }
 
   } finally {

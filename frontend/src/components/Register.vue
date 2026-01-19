@@ -1,75 +1,71 @@
 <template>
-  <v-container fluid class="fill-height modern-bg">
+  <v-container class="fill-height">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="5" lg="4">
 
-        <v-card class="glass-card pa-8" elevation="0">
-          <div class="text-center mb-8">
-            <h1 class="text-h4 font-weight-bold tracking-tight text-gradient">Registrar</h1>
+        <v-card class="pa-8 elevation-0 border-sm",
+        style="border-color: #a7a7a7 !important;
+        border-style: solid;"
+        rounded="xl">
+          <div class="text-center">
+            <h1 class="text-h5 font-weight-bold">Register</h1>
           </div>
 
-          <v-card-text class="pa-0">
-            <v-form ref="form" v-model="isFormValid" lazy-validation>
-              <div class="input-group">
-                <label class="custom-label">Nome</label>
+          <v-card-text>
+            <v-form ref="form" v-model="isFormValid" validate-on="submit">
+              <div class="input-group mt-2">
                 <v-text-field
                   v-model="userData.name"
-                  placeholder="Nome"
-                  prepend-inner-icon="mdi-account-outline"
-                  :rules="[rules.required]"
+                  label="name"
+                  placeholder="your name"
+                  persistent-placeholder
                   variant="outlined"
-                  class="modern-input"
-                  rounded="lg"
+                  :rules="[rules.required]"
                 ></v-text-field>
               </div>
 
               <div class="input-group mt-2">
-                <label class="custom-label">Email</label>
                 <v-text-field
                   v-model="userData.email"
-                  placeholder="Email"
-                  prepend-inner-icon="mdi-email-outline"
+                  label="email"
+                  placeholder="your email"
+                  persistent-placeholder
+                  variant-="outlined"
                   :rules="[rules.required, rules.email]"
                   variant="outlined"
-                  class="modern-input"
-                  rounded="lg"
                 ></v-text-field>
               </div>
 
               <div class="input-group mt-2">
-                <label class="custom-label">Senha</label>
                 <v-text-field
                   v-model="userData.password"
-                  placeholder="Senha"
-                  prepend-inner-icon="mdi-lock-outline"
+                  label="password"
+                  placeholder="your password"
+                  persistent-placeholder
+                  variant="outlined"
                   type="password"
                   :rules="[rules.required, rules.min]"
-                  variant="outlined"
-                  class="modern-input"
-                  rounded="lg"
                 ></v-text-field>
               </div>
             </v-form>
           </v-card-text>
 
-          <v-card-actions class="pa-0 mt-6">
+          <v-card-actions>
             <v-btn
               block
-              color="white"
-              size="x-large"
-              class="register-btn"
-              elevation="4"
+              size="large"
+              rounded="xs"
+              class="text-none bg-blue text-white"
               :loading="loading"
-              :disabled="!isFormValid"
               @click="handleRegister"
             >
-              Cadastrar
+              Sign up
             </v-btn>
           </v-card-actions>
 
           <div class="text-center mt-8">
-            <span class="text-body-2 text-medium-emphasis">Já possui uma conta? </span>
-            <router-link to="/login" class="login-link font-weight-bold">Entrar</router-link>
+            <span class="text-body-2 text-medium-emphasis">Already have an account? </span>
+            <router-link to="/login" class="login-link font-weight-bold">Sign in</router-link>
           </div>
         </v-card>
 
@@ -154,9 +150,9 @@ const userData = reactive({
 });
 
 const rules = {
-  required: v => !!v || 'Campo obrigatório',
-  email: v => /.+@.+\..+/.test(v) || 'E-mail deve ser válido',
-  min: v => v.length >= 6 || 'Mínimo de 6 caracteres',
+  required: v => !!v || 'Required',
+  email: v => /.+@.+\..+/.test(v) || 'Invalid email',
+  min: v => v.length >= 6 || 'Too short',
 };
 
 const handleRegister = async () => {
