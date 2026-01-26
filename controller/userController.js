@@ -1,4 +1,5 @@
 import { UserModel } from "../infra/postgres.js";
+import bcrypt from "bcryptjs";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -50,6 +51,9 @@ export const addNewUser = async (req, res) => {
     });
 
     if (user == null) {
+      const pwdDB = await hashPassowrd(req.body.password);
+      userObj.password = pwdDB;
+
       await UserModel.create(userObj);
       return res.status(201).json({
         message: "User created!"
@@ -66,7 +70,7 @@ export const addNewUser = async (req, res) => {
       error: "Internal server error"
     })
   }
-}
+};
 
 export const checkEmail = async (req, res) => {
   const userObj = req.body
@@ -111,8 +115,10 @@ export const userLogin = async (req, res) => {
         message: "User not found"
       });
     };
+    
+    const response = await checkPassword(user.password, userObj.password);
 
-    if(userObj.password === user.password) {
+    if(response === true) {
       return res.status(200).json({
         message: "Successfully logged in",
         user: user
@@ -128,6 +134,32 @@ export const userLogin = async (req, res) => {
     });
 
     
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function hashPassowrd (reqPwd) {
+  const userPassword = reqPwd;
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const passwordDB = await bcrypt.hash(userPassword, salt);
+
+    return passwordDB;
+  } catch (error) {
+    console.error(error);
+  };
+};
+
+async function checkPassword (pwdDB, reqPwd) {
+  try {
+    const res = await bcrypt.compare(reqPwd, pwdDB);
+
+    if (res == true) {
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     console.error(error);
   }
