@@ -3,7 +3,10 @@ import bcrypt from "bcryptjs";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await UserModel.findAll();
+    const users = await UserModel.findAll({
+      attributes: ['id', 'name', 'email', 'createdAt'],
+      order: [['createdAt', 'DESC']]
+    });
 
     if (users.length == 0){
       return res.status(200).json({
