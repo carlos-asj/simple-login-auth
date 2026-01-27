@@ -1,7 +1,7 @@
 <template>
   <v-container class="fill-height">
     <v-row align="center" justify="center">
-      <v-col cols="12" sm="8" md="5" lg="4">
+      <v-col cols="12" sm="8" md="5" lg="5">
 
         <v-card class="pa-8 elevation-0 border-sm",
         style="border-color: #a7a7a7 !important;
@@ -21,6 +21,7 @@
                   persistent-placeholder
                   variant="outlined"
                   :rules="[rules.required]"
+                  @keyup.enter="handleRegister"
                 ></v-text-field>
               </div>
 
@@ -33,6 +34,7 @@
                   variant-="outlined"
                   :rules="[rules.required, rules.email]"
                   variant="outlined"
+                  @keyup.enter="handleRegister"
                 ></v-text-field>
               </div>
 
@@ -45,6 +47,7 @@
                   variant="outlined"
                   type="password"
                   :rules="[rules.required, rules.min]"
+                  @keyup.enter="handleRegister"
                 ></v-text-field>
               </div>
             </v-form>
@@ -136,12 +139,18 @@
 </style>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import api from '@/services/api';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const isFormValid = ref(false);
 const loading = ref(false);
 const form = ref(null);
+
+const emailError = ref('');
+const isEmailTaken = ref(false);
 
 const userData = reactive({
   name: '',
@@ -155,6 +164,13 @@ const rules = {
   min: v => v.length >= 6 || 'Too short',
 };
 
+watch(() => userData.email, (newEmail) => {
+  if (newEmail && isEmailTaken.value) {
+    isEmailTaken.value = false;
+    emailError.value = '';
+  }
+});
+
 const handleRegister = async () => {
   const { valid } = await form.value.validate();
 
@@ -163,10 +179,29 @@ const handleRegister = async () => {
     try {
       await api.post('/register', userData);
       alert('Usuário cadastrado com sucesso!');
+
+      userData.name = '';
+      userData.email = '';
+      userData.password = '';
+
+      if (form.value) {
+        form.value.reset();
+        form.value.resetValidation();
+      }
+
+      isFormValid.value = false;
+      emailError.value = '';
+      isEmailTaken.value = false;
+
+      setTimeout(() => { router.push('/login'); }, 1500);
+
     } catch (error) {
       console.error('Erro:', error);
       let mensagemErro = error.response?.data?.message || 'Erro de conexão.';
       alert('Erro ao cadastrar: ' + mensagemErro);
+      userData.name = '';
+      userData.email = '';
+      userData.password = '';
     } finally {
       loading.value = false;
     }

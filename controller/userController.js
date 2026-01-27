@@ -60,7 +60,7 @@ export const addNewUser = async (req, res) => {
       });
     };
 
-    return res.status(200).json({
+    return res.status(409).json({
       message: "User already exists"
     })
 
@@ -153,9 +153,9 @@ async function hashPassowrd (reqPwd) {
 
 async function checkPassword (pwdDB, reqPwd) {
   try {
-    const res = await bcrypt.compare(reqPwd, pwdDB);
+    const pwdCompare = await bcrypt.compare(reqPwd, pwdDB);
 
-    if (res == true) {
+    if (pwdCompare == true) {
       return true;
     } else {
       return false;

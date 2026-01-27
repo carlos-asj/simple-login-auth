@@ -88,6 +88,7 @@
 import { ref, reactive, nextTick } from 'vue';
 import api from '@/services/api';
 import { useRouter } from 'vue-router';
+import { watch } from 'vue';
 
 const router = useRouter();
 
@@ -116,6 +117,22 @@ const step = ref('identification'); // Controle de estado: 'identification' ou '
 const isValid = ref(false);
 const loading = ref(false);
 const form = ref(null);
+
+watch(step, (newStep) => {
+  if (form.value) {
+    if (newStep === 'identification') {
+      // Na etapa de email, valide normalmente
+      form.value.validate();
+    } else if (newStep === 'senha') {
+      // Na etapa de senha, resete a validação primeiro
+      setTimeout(() => {
+        if (form.value) {
+          form.value.resetValidation();
+        }
+      }, 100);
+    }
+  }
+});
 
 const handleSubmit = () => {
   if (step.value === 'identification') {
