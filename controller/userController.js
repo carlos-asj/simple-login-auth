@@ -1,6 +1,7 @@
 import { UserModel } from "../infra/postgres.js";
 import bcrypt from "bcryptjs";
 
+// HTTP methods
 export const getAllUsers = async (req, res) => {
   try {
     const users = await UserModel.findAll({
@@ -140,8 +141,57 @@ export const userLogin = async (req, res) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
+export const deleteUser = async (req, res) => {
+  let userId = req.params.id;
+  try {
+    const user = await UserModel.findOne({
+      where: { id: userId }
+    });
+
+    if (user == null) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    };
+
+    await user.destroy();
+    return res.status(200).json({
+      message: "Usuário deletado"
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Internal server error"
+    });
+  };
+};
+
+export const updateUser = async (req, res) => {
+  let userId = req.params.id;
+  try {
+    const user = await UserModel.update(req.body, {
+      where: { id: userId }
+    });
+
+    const resUser = await UserModel.findOne({
+      where: { id: userId }
+    });
+
+    return res.status(200).json({
+      message: "Usuário alterado com sucesso",
+      user: resUser
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Internal server error"
+    });
+  };
+};
+
+// functions
 async function hashPassowrd (reqPwd) {
   const userPassword = reqPwd;
   try {

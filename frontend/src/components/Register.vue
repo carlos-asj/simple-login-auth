@@ -12,7 +12,7 @@
           </div>
 
           <v-card-text>
-            <v-form ref="form" v-model="isFormValid" validate-on="submit">
+            <v-form ref="form" v-model="isFormValid">
               <div class="input-group mt-2">
                 <v-text-field
                   v-model="userData.name"
