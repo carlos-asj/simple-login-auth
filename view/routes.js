@@ -10,8 +10,8 @@ router.post("/register", addNewUser);
 router.post("/check-email", checkEmail);
 router.post("/login", userLogin);
 
-router.delete("/user/:id", deleteUser);
+router.delete("/users/:id", deleteUser);
 
-router.put("/user/:id", updateUser);
+router.put("/users/:id", updateUser);
 
 export default router;

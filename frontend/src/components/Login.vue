@@ -19,7 +19,7 @@
       </v-card-item>
 
       <v-card-text>
-        <v-form ref="form" v-model="isValid" validate-on="submit" @submit.prevent="handleSubmit">
+        <v-form ref="form" v-model="isValid" @submit.prevent="handleSubmit">
 
           <v-window v-model="step">
             <v-window-item value="identification">
@@ -154,13 +154,17 @@ const rules = {
 };
 
 const passwordInput = ref(null);
+const shouldValidate = ref(false);
 
 // Função para validar o e-mail no Backend
 const checkEmail = async () => {
 
   if (!form.value) return;
 
-  // Forçamos a validação manual
+  shouldValidate.value = false;
+
+  await new Promise(resolve => setTimeout(resolve, 50));
+
   const { valid } = await form.value.validate();
 
   if (!valid) return;
@@ -178,6 +182,7 @@ const checkEmail = async () => {
   } catch (error) {
     console.error("Erro na API:", error);
     alert('User not found.');
+    shouldValidate.value = false;
   } finally {
     loading.value = false;
   }
@@ -186,6 +191,9 @@ const checkEmail = async () => {
 const passwordError = ref('');
 
 const handleLogin = async () => {
+  shouldValidate.value = false;
+  await new Promise(resolve => setTimeout(resolve, 50));
+
   loading.value = true;
   passwordError.value = '';
 
@@ -202,7 +210,8 @@ const handleLogin = async () => {
 
     if (error.response.status === 401) {
       passwordError.value = 'Wrong password. Try again';
-    }
+    };
+    shouldValidate.value = false;
 
   } finally {
     loading.value = false;

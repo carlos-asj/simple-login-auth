@@ -148,6 +148,7 @@ const router = useRouter();
 const isFormValid = ref(false);
 const loading = ref(false);
 const form = ref(null);
+const shouldValidate = ref(false);
 
 const emailError = ref('');
 const isEmailTaken = ref(false);
@@ -172,6 +173,10 @@ watch(() => userData.email, (newEmail) => {
 });
 
 const handleRegister = async () => {
+  shouldValidate.value = true;
+
+  await new Promise(resolve => setTimeout(resolve, 50));
+
   const { valid } = await form.value.validate();
 
   if (valid) {
@@ -192,6 +197,7 @@ const handleRegister = async () => {
       isFormValid.value = false;
       emailError.value = '';
       isEmailTaken.value = false;
+      shouldValidate.value = false;
 
       setTimeout(() => { router.push('/login'); }, 1500);
 
@@ -202,6 +208,7 @@ const handleRegister = async () => {
       userData.name = '';
       userData.email = '';
       userData.password = '';
+      shouldValidate.value = false;
     } finally {
       loading.value = false;
     }
